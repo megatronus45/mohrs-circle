@@ -1,88 +1,76 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-σx = float(input("Enter σx (MPa):"))
-σy = float(input("Enter σy (MPa):"))
-τxy = float(input("Enter τxy (MPa):"))
 
-def eqns(σx, σy, τxy):
+ #   s_x = float(input("Enter σx (MPa):"))
+  #  s_y = float(input("Enter σy (MPa):"))
+   # t_xy = float(input("Enter τxy (MPa):"))
+
+
+def eqns(s_x, s_y, t_xy):
     
-    r = τmax = np.sqrt(((σx - σy)/2)**2 + (τxy)**2)
-    σavg = ((σx + σy)/2)
-    σmax = σavg + τmax
-    σmin = σavg - τmax
-    
-    return r, σavg, σmin, σmax
+    r = t_max = np.sqrt(((s_x - s_y)/2)**2 + (t_xy)**2)
+    s_avg = ((s_x + s_y)/2)
+    s_max = s_avg + t_max
+    s_min = s_avg - t_max
 
-r, σavg, σmin, σmax = eqns(σx, σy, τxy)
+    return r, s_avg, s_min, s_max
 
-# Values adjusted by user interacting with UI (undefined var theta)
-# σx_prime = σavg + ((σx - σy)/2) * np.cos(2*θ) + τxy * np.sin(2*θ)
-# σy_prime = σavg - ((σx - σy)/2) * np.cos(2*θ) - τxy * np.sin(2*θ)
-# τxy_prime = -((σx - σy)/2) * np.sin(2*θ) + τxy * np.cos(2*θ)
+def circle(s_avg, r):
+    phi = np.linspace(0, 2 * np.pi, 500)
 
-def circle(σavg, r):
-    𝜙 = np.linspace(0, 2 * np.pi, 500)
+    s_prime = s_avg + r * np.cos(phi)
+    t_prime = -r * np.sin(phi)
 
-    σ_prime = σavg + r * np.cos(𝜙)
-    τ_prime = -r * np.sin(𝜙)
+    circle_x = s_prime
+    circle_y = t_prime
 
-    circle_x = σ_prime
-    circle_y = τ_prime
-    
     return circle_x, circle_y
 
-circle_x, circle_y = circle(σavg, r)
+def angles(t_xy, s_x, s_y):
+    theta_p = 0.5 * np.arctan2(2*t_xy, (s_x - s_y)) 
+    theta_s = theta_p + np.pi/4
 
-plt.plot(circle_x, circle_y, color = '#880808')
+    theta_p = np.degrees(theta_p)
+    theta_s = np.degrees(theta_s)
 
-# angles for max stress and shear
-θp = 0.5 * np.arctan2(2*τxy, (σx - σy)) 
-θs = θp + np.pi/4
+    return theta_p, theta_s
 
-θp = np.degrees(θp)
-θs = np.degrees(θs)
+def o_plot(x, y, xkeypts, ykeypts, circle_x, circle_y, r, s_avg, s_max, s_min, s_x, s_y, t_xy):
 
-print(round(θp, 2),"\b° to get to σavg")
-print(round(θs, 2), "\b° to get to τmax")
+    x = np.array([s_x, s_y])
+    y = np.array([t_xy, -t_xy])
+    xkeypts = np.array([s_avg, s_max, s_min, s_avg])
+    ykeypts = np.array([0, 0, 0, r])
 
-print("τmax is", round(r, 2), "MPa")
-print("σavg is", round(σavg, 2), "MPa")
-print("σmax", round(σmax, 2), "MPa")
-print("σmin", round(σmin, 2), "MPa")
-
-plt.title(
-          label = 'Mohrs Stress Circle', 
-          loc = 'center'
-          )
-plt.xlabel("σ (MPa)")
-plt.ylabel("τ (MPa)")
-
-x = np.array([σx, σy])
-y = np.array([τxy, -τxy])
-xkeypts = np.array([σavg, σmax, σmin, σavg])
-ykeypts = np.array([0, 0, 0, r])
-
-plt.axis('equal')
-
-plt.axvline(
-            x = 0, 
-            color = 'black', 
-            linestyle = '-', 
-            linewidth = 1.5
+    plt.title(
+            label = 'Mohrs Stress Circle', 
+            loc = 'center'
             )
+    plt.xlabel("σ (MPa)")
+    plt.ylabel("τ (MPa)")
+    plt.axis('equal')
 
-plt.axhline(
-            y = 0, 
-            color = 'black',
-            linestyle = '-',
-            linewidth = 1.5
-            )
+    plt.axvline(
+                x = 0, 
+                color = 'black', 
+                linestyle = '-', 
+                linewidth = 1.5
+                )
 
-plt.xlabel("σ (MPa)")
-plt.ylabel("τ (MPa)")
+    plt.axhline(
+                y = 0, 
+                color = 'black',
+                linestyle = '-',
+                linewidth = 1.5
+                )
 
-plt.plot(x, y, '.-', color = 'black', ms = 8)
-plt.plot(xkeypts, ykeypts, '.', color = '#880808', ms = 8)
+    plt.xlabel("σ (MPa)")
+    plt.ylabel("τ (MPa)")
 
-plt.show()
+    plt.plot(circle_x, circle_y, color = '#880808')
+
+    plt.plot(x, y, '.-', color = 'black', ms = 8)
+    plt.plot(xkeypts, ykeypts, '.', color = '#880808', ms = 8)
+
+
