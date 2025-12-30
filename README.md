@@ -69,3 +69,14 @@ While this tool isn’t designed for production engineering use, it served as a 
 * Understand how user input propagates through calculations and visualizations
 
 This project laid the groundwork for future Python-based engineering and data projects.
+
+## 🎥 Demo Preview
+
+![MohrsCircle](https://github.com/user-attachments/assets/30b4f6ff-4ad4-4816-9f4d-18c78df31170)
+
+
+## 🚀 Deployment
+
+The app is deployed using Streamlit Cloud and runs entirely in the browser.
+No local setup is required.
+
