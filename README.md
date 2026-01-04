@@ -80,3 +80,9 @@ This project laid the groundwork for future Python-based engineering and data pr
 The app is deployed using Streamlit Cloud and runs entirely in the browser.
 No local setup is required.
 
+## 👤 Author 
+
+#### Numair Syed
+December, 2025.
+
+
